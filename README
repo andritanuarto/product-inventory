@@ -1,0 +1,6 @@
+#run the project
+mongod
+nodemon index.js
+
+#Set up test environment on your terminal
+export hasfern_jwtPrivateKey=mySecureKey

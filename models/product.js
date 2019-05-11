@@ -10,8 +10,8 @@ const productSchema = new mongoose.Schema({
     maxlength: 200,
     message: 'Name is required',
   },
-  supplier: {
-    type: supplierSchema,
+  suppliers: {
+    type: Array,
   },
   type: {
     type: String,
@@ -44,7 +44,7 @@ const Product = mongoose.model('Product', productSchema);
 function validateProduct (product) {
   const schema = {
     name: joi.string().min(1).max(200).required(),
-    supplierId: joi.objectId().required(),
+    supplierIds: joi.array().required(),
     type: joi.string().optional().min(0).max(200),
     material: joi.string().optional().min(0).max(200),
     quantity: joi.number().min(0).max(100000),

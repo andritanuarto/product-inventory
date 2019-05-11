@@ -5,6 +5,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const users = require('./routes/users');
 const products = require('./routes/products');
+const suppliers = require('./routes/suppliers');
+
 const app = express();
 
 if (!config.get('jwtPrivateKey')) {
@@ -19,7 +21,7 @@ mongoose.connect('mongodb://localhost/hasfern-product', { useNewUrlParser: true 
 app.use(express.json());
 app.use('/users', users);
 app.use('/products', products);
-
+app.use('/suppliers', suppliers);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

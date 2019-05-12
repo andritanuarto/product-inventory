@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
+const Fawn = require('fawn');
 const { Supplier, validate } = require('../models/supplier');
+const { Product } = require('../models/product');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 router.post('/', async(req, res) => {
   const { error } = validate(req.body);
@@ -15,6 +18,17 @@ router.post('/', async(req, res) => {
   await supplier.save();
 
   res.send(`${req.body.name} is added`);
+});
+
+router.delete('/:id', async (req, res) => {
+  const supplier = await Supplier.findByIdAndDelete(req.params.id)
+
+  if (!supplier) return res.status(400).send('Cannot find a supplier that you want to delete');
+
+  // find product that has the same supplier id and update product and delete the supplier id
+  const products = await Product
+    .find({ suppliers: { $elemMatch: {_id: ObjectId(req.params.id)} }})
+    .updateMany({ $pull: { suppliers: { _id: ObjectId(req.params.id) } }})
 });
 
 module.exports = router;
